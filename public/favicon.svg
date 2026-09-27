@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#0A0A0A" />
+  <rect x="2" y="2" width="60" height="60" rx="12" fill="none" stroke="#F5C400" stroke-width="2" opacity="0.3" />
+  <!-- Dumbbell / IronHub Emblem -->
+  <path d="M14 20h6v24h-6zM44 20h6v24h-6z" fill="#F5C400" />
+  <path d="M20 28h24v8H20z" fill="#FFFFFF" />
+  <path d="M10 24h4v16h-4zM50 24h4v16h-4z" fill="#F5C400" opacity="0.8" />
+</svg>
