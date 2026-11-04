@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initBillingToggle();
   initPricingSlider();
   initProgramModals();
+  initScheduleTabs();
   initTestimonialSlider();
   initBookingForm();
   initFaqAccordion();
@@ -176,10 +177,10 @@ function initLocationModal() {
         locationNameEl.textContent = shortName;
       }
       if (drawerLocationEl) {
-        drawerLocationEl.textContent = `${loc}, Delhi NCR`;
+        drawerLocationEl.textContent = `${loc}, TX`;
       }
       if (sectionLocationTitle) {
-        sectionLocationTitle.textContent = `${loc}, Delhi NCR`;
+        sectionLocationTitle.textContent = `${loc}, TX`;
       }
 
       closeModal();
@@ -188,7 +189,7 @@ function initLocationModal() {
 }
 
 /* --------------------------------------------------------------------------
-   4. MEMBERSHIP BILLING CYCLE TOGGLE (MONTHLY VS QUARTERLY)
+   4. MEMBERSHIP BILLING CYCLE TOGGLE (MONTH-TO-MONTH VS ANNUAL)
    -------------------------------------------------------------------------- */
 function initBillingToggle() {
   const monthlyBtn = document.getElementById('billing-monthly');
@@ -199,14 +200,14 @@ function initBillingToggle() {
   if (!monthlyBtn || !quarterlyBtn) return;
 
   function setCycle(cycle) {
-    if (cycle === 'quarterly') {
+    if (cycle === 'annual' || cycle === 'quarterly') {
       quarterlyBtn.classList.add('active');
       monthlyBtn.classList.remove('active');
       amountEls.forEach(el => {
-        el.textContent = el.getAttribute('data-quarterly');
+        el.textContent = el.getAttribute('data-annual') || el.getAttribute('data-quarterly');
       });
       periodEls.forEach(el => {
-        el.textContent = el.getAttribute('data-quarterly');
+        el.textContent = el.getAttribute('data-annual-period') || '/mo (annual)';
       });
     } else {
       monthlyBtn.classList.add('active');
@@ -215,13 +216,13 @@ function initBillingToggle() {
         el.textContent = el.getAttribute('data-monthly');
       });
       periodEls.forEach(el => {
-        el.textContent = el.getAttribute('data-monthly');
+        el.textContent = el.getAttribute('data-monthly-period') || '/month';
       });
     }
   }
 
   monthlyBtn.addEventListener('click', () => setCycle('monthly'));
-  quarterlyBtn.addEventListener('click', () => setCycle('quarterly'));
+  quarterlyBtn.addEventListener('click', () => setCycle('annual'));
 }
 
 /* --------------------------------------------------------------------------
@@ -233,13 +234,13 @@ const PROGRAM_DATA = {
     lead: 'Scientifically engineered for progressive overload and muscle development.',
     details: [
       'Focus on compound barbell lifts (Squat, Bench Press, Deadlift, Overhead Press)',
-      'High-grade Olympic barbells and calibrated steel plates',
+      'Competition Rogue & Eleiko barbells and calibrated steel pound plates',
       'Individual biomechanics screening and posture alignment',
       'Periodized training splits: Push/Pull/Legs and Upper/Lower',
-      'Targeted accessory equipment: Belt squats, Glute-Ham developers, and Cable towers'
+      'Targeted accessory gear: Belt squats, GHDs, and dual cable towers'
     ],
-    schedule: 'Daily Coaching Available: 6:00 AM - 11:00 PM',
-    idealFor: 'Beginners seeking form mastery to competitive athletes'
+    schedule: 'Coaching Available Daily: 5:00 AM - 11:00 PM',
+    idealFor: 'Beginners seeking form mastery to competitive powerlifters'
   },
   'Fat Loss Program': {
     title: 'FAT LOSS & METABOLIC CONDITIONING',
@@ -247,34 +248,34 @@ const PROGRAM_DATA = {
     details: [
       'Heart-rate targeted HIIT and steady-state cardiovascular conditioning',
       'EPOC (Excess Post-Exercise Oxygen Consumption) interval protocols',
-      'Personalized body composition analysis (InBody bioimpedance scan)',
+      'Personalized body composition analysis (InBody 570 bioimpedance scan)',
       'Custom macro-nutrient and caloric deficit roadmaps',
       'Weekly progress tracking with circumference and fat percentage checkpoints'
     ],
     schedule: 'Morning & Evening Dedicated Sessions',
-    idealFor: 'Anyone wanting rapid, sustainable weight reduction and toning'
+    idealFor: 'Anyone wanting rapid, sustainable weight reduction and athletic conditioning'
   },
   'Group Classes': {
     title: 'HIGH-ENERGY GROUP CLASSES',
     lead: 'Surge of energy, world-class certified instructors, and infectious group camaraderie.',
     details: [
-      'IronHIIT: High-octane interval conditioning classes',
+      'IronHIIT: High-octane interval conditioning circuits',
       'Power Spin: High-resistance indoor cycling with pulse lighting',
       'Core & Mobility: 45-minute deep core strengthening & spine mobility',
       'Bootcamp Surge: Obstacle & battle rope team circuits',
-      'Soundtrack engineered for peak heart rate elevation'
+      'Soundtracks engineered for peak heart rate elevation'
     ],
-    schedule: '6 Classes Daily: 7AM, 8:30AM, 10AM, 5PM, 6:30PM, 8PM',
+    schedule: '6 Classes Daily: 6AM, 7:30AM, 9AM, 4:30PM, 6PM, 7:30PM',
     idealFor: 'All fitness levels loving music and team energy'
   },
   'Functional Training': {
-    title: 'FUNCTIONAL ATHLETIC TRAINING',
+    title: 'FUNCTIONAL ATHLETIC TRAINING & RECOVERY',
     lead: 'Enhance real-world movement capacity, joint longevity, and explosive power.',
     details: [
-      'Turf sprint lanes with weighted sled push & pull equipment',
+      'Indoor turf sprint lanes with weighted sled push & pull tracks',
       'Heavy dual-rope battle ropes, kettlebells, and Bulgarian bags',
       'Rotational power training using Keiser pneumatic resistance cables',
-      'Multi-planar movement drills preventing joint injury',
+      'Contrast recovery integration (infrared sauna & cold plunge tubs)',
       'Plyometric boxes, slam balls, and gymnastic rings'
     ],
     schedule: 'Open Turf Access + Dedicated Coaching Slots',
@@ -430,9 +431,10 @@ function initBookingForm() {
       nameInput.closest('.form-group').classList.remove('has-error');
     }
 
-    // Validate Phone (10 digits)
+    // Validate Phone (US 10-digit number)
     const phoneClean = phoneInput.value.replace(/\D/g, '');
-    if (phoneClean.length < 10) {
+    const isUsPhone = phoneClean.length === 10 || (phoneClean.length === 11 && phoneClean.startsWith('1'));
+    if (!isUsPhone) {
       phoneInput.closest('.form-group').classList.add('has-error');
       isValid = false;
     } else {
@@ -443,20 +445,60 @@ function initBookingForm() {
 
     // Submit Animation
     submitBtn.disabled = true;
-    submitBtn.innerHTML = `<span>Processing Pass...</span>`;
+    submitBtn.innerHTML = `<span>Generating 3-Day VIP Pass...</span>`;
 
     setTimeout(() => {
       form.style.display = 'none';
-      if (successBox) {
+      const digitalPass = document.getElementById('digital-pass-card');
+      if (digitalPass) {
+        // Generate real randomized Austin VIP serial
+        const randomId = Math.floor(10000 + Math.random() * 90000);
+        const serialCode = `PASS #ATX-${randomId}`;
+        const barcodeNum = `4892 ${Math.floor(1000 + Math.random() * 9000)} ${Math.floor(1000 + Math.random() * 9000)} ${randomId.toString().slice(0, 4)}`;
+
+        const guestNameEl = document.getElementById('pass-guest-name');
+        const serialEl = document.getElementById('pass-serial-id');
+        const focusEl = document.getElementById('pass-focus-name');
+        const datesEl = document.getElementById('pass-valid-dates');
+        const digitsEl = document.getElementById('pass-barcode-digits');
+        const smsAction = document.getElementById('pass-sms-action');
+
+        if (guestNameEl) guestNameEl.textContent = nameInput.value.trim();
+        if (serialEl) serialEl.textContent = serialCode;
+        if (focusEl) focusEl.textContent = goalInput.value;
+        if (datesEl) datesEl.textContent = `${dateVal} (${slotVal})`;
+        if (digitsEl) digitsEl.textContent = barcodeNum;
+
+        if (smsAction) {
+          smsAction.href = `sms:+15125550198?body=Hi%20IronHub,%20here%20is%20my%20VIP%20Pass%20ATX-${randomId}%20for%20${encodeURIComponent(nameInput.value.trim())}.`;
+        }
+
+        digitalPass.style.display = 'block';
+        digitalPass.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else if (successBox) {
         successBox.style.display = 'flex';
         if (successText) {
           successText.innerHTML = `
-            Thank you <strong>${nameInput.value.trim()}</strong>! Your 1-Day VIP Trial Pass for <strong>${goalInput.value}</strong> on <strong>${dateVal}</strong> (${slotVal}) has been reserved at our Sector 62, Noida facility.
+            Thank you <strong>${nameInput.value.trim()}</strong>! Your Free 3-Day VIP All-Access Pass for <strong>${goalInput.value}</strong> starting on <strong>${dateVal}</strong> (${slotVal}) has been confirmed for our South Congress, Austin club. A digital pass has been sent via SMS.
           `;
         }
       }
-    }, 600);
+    }, 550);
   });
+
+  // US Phone auto-formatter (XXX) XXX-XXXX
+  const phoneInputEl = document.getElementById('form-phone');
+  if (phoneInputEl) {
+    phoneInputEl.addEventListener('input', (e) => {
+      const numbers = e.target.value.replace(/\D/g, '');
+      const char = { 0: '(', 3: ') ', 6: '-' };
+      let formatted = '';
+      for (let i = 0; i < Math.min(numbers.length, 10); i++) {
+        formatted += (char[i] || '') + numbers[i];
+      }
+      e.target.value = formatted;
+    });
+  }
 
   // Clear errors on input
   ['form-name', 'form-phone'].forEach(id => {
@@ -466,6 +508,41 @@ function initBookingForm() {
         el.closest('.form-group').classList.remove('has-error');
       });
     }
+  });
+}
+
+/* --------------------------------------------------------------------------
+   8. SCHEDULE FILTER TABS & QUICK BOOKING SYNC
+   -------------------------------------------------------------------------- */
+function initScheduleTabs() {
+  const dayTabs = document.querySelectorAll('.schedule-days-tabs .day-tab');
+  const bookBtns = document.querySelectorAll('.sched-book-btn');
+  const goalSelect = document.getElementById('form-goal');
+
+  dayTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      dayTabs.forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+    });
+  });
+
+  bookBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cls = btn.getAttribute('data-class') || '';
+      if (goalSelect) {
+        if (cls.includes('Barbell')) {
+          goalSelect.value = 'Strength Training';
+        } else if (cls.includes('HIIT') || cls.includes('Spin')) {
+          goalSelect.value = 'Group Classes';
+        } else {
+          goalSelect.value = 'Functional Training';
+        }
+      }
+    });
   });
 }
 
