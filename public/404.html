@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>404 - Page Not Found | IronHub Fitness Club</title>
+  <meta name="robots" content="noindex, follow">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-black: #0A0A0A;
+      --color-dark: #121212;
+      --color-yellow: #F5C400;
+      --color-yellow-hover: #D4A900;
+      --text-white: #FFFFFF;
+      --text-muted: #8E8E93;
+      --font-display: 'Bebas Neue', Impact, sans-serif;
+      --font-condensed: 'Barlow Condensed', sans-serif;
+      --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--color-black);
+      color: var(--text-white);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(245, 196, 0, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .error-card {
+      position: relative;
+      z-index: 1;
+      max-width: 520px;
+      width: 100%;
+      background: rgba(18, 18, 18, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 48px 32px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .brand-header {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+      text-decoration: none;
+    }
+
+    .logo-svg {
+      width: 36px;
+      height: 36px;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      letter-spacing: 1.5px;
+      color: var(--text-white);
+    }
+
+    .error-code {
+      font-family: var(--font-display);
+      font-size: clamp(5rem, 18vw, 8rem);
+      line-height: 0.9;
+      color: var(--color-yellow);
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      text-shadow: 0 8px 32px rgba(245, 196, 0, 0.3);
+    }
+
+    .error-headline {
+      font-family: var(--font-condensed);
+      font-size: 1.4rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 14px;
+      color: #fff;
+    }
+
+    .error-desc {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    .btn-return {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background-color: var(--color-yellow);
+      color: #0A0A0A;
+      font-family: var(--font-condensed);
+      font-size: 1.05rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 14px 28px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 6px 20px rgba(245, 196, 0, 0.35);
+    }
+
+    .btn-return:hover {
+      background-color: var(--color-yellow-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(245, 196, 0, 0.5);
+    }
+
+    .error-footer {
+      margin-top: 28px;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.4);
+      letter-spacing: 1px;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="error-card">
+    <a href="/" class="brand-header" aria-label="IronHub Fitness Club Home">
+      <svg class="logo-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="32" height="32" rx="6" fill="#F5C400" />
+        <path d="M7 10h3v12H7zM22 10h3v12h-3z" fill="#0A0A0A" />
+        <path d="M10 14h12v4H10z" fill="#0A0A0A" />
+      </svg>
+      <span class="brand-title">IRONHUB FITNESS</span>
+    </a>
+
+    <div class="error-code">404</div>
+    <h1 class="error-headline">Off Track // Page Not Found</h1>
+    <p class="error-desc">
+      The destination you are looking for has moved, was renamed, or does not exist. Turn around and get back to training.
+    </p>
+
+    <a href="/" class="btn-return">
+      <span>RETURN TO CLUB HOME</span>
+      <span>&rarr;</span>
+    </a>
+
+    <div class="error-footer">
+      FLAGSHIP: 1401 S CONGRESS AVE • AUSTIN, TX
+    </div>
+  </div>
+</body>
+</html>
